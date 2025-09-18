@@ -1,0 +1,52 @@
+// Дан массив цифр от 1 до 10 в произвольном порядке. Необходимо разбить его на два списка: в первом цифры будут от 1 до 5, а во втором 6 до 10.
+package helloapp;
+import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
+
+public class StackNumberSplitter {
+    public static void main(String[] args) {
+        // Исходный массив цифр от 1 до 10
+        int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        
+        // Создаем два стека для разделения чисел
+        Stack<Integer> stack1 = new Stack<>(); // для чисел 1-5
+        Stack<Integer> stack2 = new Stack<>(); // для чисел 6-10
+        
+        // Проходим по всем числам в массиве
+        for (int num : numbers) {
+            if (num <= 5) {
+                stack1.push(num); // Добавляем в первый стек если число <= 5
+            } else {
+                stack2.push(num); // Добавляем во второй стек если число > 5
+            }
+        }
+        
+        // Создаем списки для хранения результатов
+        List<Integer> list1 = new ArrayList<>();
+        List<Integer> list2 = new ArrayList<>();
+        
+        // Извлекаем элементы из первого стека и сохраняем в list1
+        while (!stack1.isEmpty()) {
+            list1.add(stack1.pop()); // Удаляем верхний элемент и добавляем в список
+        }
+        
+        // Извлекаем элементы из второго стека и сохраняем в list2
+        while (!stack2.isEmpty()) {
+            list2.add(stack2.pop()); // Удаляем верхний элемент и добавляем в список
+        }
+        
+        // Выводим результаты
+        System.out.print("Первый список (1-5): ");
+        for (int num : list1) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+        
+        System.out.print("Второй список (6-10): ");
+        for (int num : list2) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+    }
+}
