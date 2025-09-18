@@ -1,0 +1,63 @@
+// Необходимо ввести положительное число и проверить с помощью программы является ли оно палиндромом. 
+package helloapp;
+import java.util.Scanner;
+import java.util.Stack;
+
+public class PalindromeChecker {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Ввод числа от пользователя
+        System.out.print("Введите положительное число: ");
+        int number = scanner.nextInt();
+        
+        // Проверка на положительное число
+        if (number < 0) {
+            System.out.println("Ошибка: введите положительное число!");
+            return;
+        }
+        
+        // Проверка является ли число палиндромом
+        boolean isPalindrome = isNumberPalindrome(number);
+        
+        // Вывод результата
+        if (isPalindrome) {
+            System.out.println("Число " + number + " является палиндромом!");
+        } else {
+            System.out.println("Число " + number + " НЕ является палиндромом!");
+        }
+        
+        scanner.close();
+    }
+    
+    // Метод для проверки является ли число палиндромом с использованием стека
+    public static boolean isNumberPalindrome(int number) {
+        // Преобразуем число в строку для удобства обработки цифр
+        String numberStr = String.valueOf(number);
+        
+        // Создаем стек для хранения цифр
+        Stack<Character> stack = new Stack<>();
+        
+        // Помещаем все цифры числа в стек
+        for (int i = 0; i < numberStr.length(); i++) {
+            stack.push(numberStr.charAt(i)); // Добавляем каждую цифру в стек
+        }
+        
+        // Сравниваем цифры из стека (обратный порядок) с исходными цифрами
+        for (int i = 0; i < numberStr.length(); i++) {
+            // Извлекаем цифру из стека (она будет в обратном порядке)
+            char digitFromStack = stack.pop();
+            
+            // Берем цифру из исходного числа
+            char digitFromOriginal = numberStr.charAt(i);
+            
+            // Если цифры не совпадают - число не палиндром
+            if (digitFromStack != digitFromOriginal) {
+                return false;
+            }
+        }
+        
+        // Если все цифры совпали - число палиндром
+        return true;
+    }
+}
