@@ -1,0 +1,138 @@
+package src;
+
+import java.util.Scanner; //импорт класса для ввода данных с клавиатуры
+
+class SingleList { // класс представляющий узел списка
+    int Data;  // поле хранения данных
+    SingleList Next; // ссылка на следующий узел
+    
+    SingleList(int data) { // формирование узла
+        this.Data = data; // инициализация поля переданным значениям
+        this.Next = null; //установка ссылки на следующий узел
+    }
+}
+public class LinkedListJava { // главный класс для работы со списком
+	
+    private SingleList Head; // ссылка на первый узел списка
+    private Scanner scanner; // объект для чтения ввода с клавиатуры пользователем
+    
+    public LinkedListJava() { // формирование класса
+        Head = null;  // инициализация пустого списка
+        scanner = new Scanner(System.in); // создание объекта
+    }
+    
+    // Рекурсивное создание списка (аналог C++ прототипа)
+    public void MakeSingleList(int n) {
+        if (n > 0) {
+            System.out.print("Введите значение: ");
+            int value = scanner.nextInt(); //чтение целого числа от пользователя
+            
+            Head = new SingleList(value); // создание первого узла и установка вершины
+            MakeSingleList(n - 1, Head); // рекурсивный вызов для создания других узлов
+        }
+    }
+    
+    private void MakeSingleList(int n, SingleList current) { 
+        if (n > 0) {
+            System.out.print("Введите значение: ");
+            int value = scanner.nextInt();
+            
+            current.Next = new SingleList(value);
+            MakeSingleList(n - 1, current.Next);
+        }
+    }
+    
+    // Вывод списка
+    public void PrintList() { //выхов всего списка
+        SingleList current = Head;
+        while (current != null) { // цикл пока не дойдем до конца списка
+            System.out.print(current.Data); 
+            if (current.Next != null) { 
+                System.out.print(" -> "); // если элемент не последний выводим стрелку
+            }
+            current = current.Next;
+        }
+        System.out.println(" -> NULL");
+    }
+    
+    // Вставка в начало
+    public void InsertFront(int value) {
+        SingleList new_node = new SingleList(value); // создание новго узла
+        new_node.Next = Head; // узел указываает на вершину
+        Head = new_node;
+    }
+    
+    // Удаление элемента
+    public boolean DeleteElement(int value) {
+        if (Head == null) return false; // проверка на пустой список
+        
+        if (Head.Data == value) { // проверка если удаляемый элемент первый
+            Head = Head.Next; // перемещаем вершину на следующий узел
+            return true;
+        }
+        
+        SingleList current = Head; 
+        while (current.Next != null && current.Next.Data != value) { 
+            current = current.Next;
+        }
+        
+        if (current.Next != null) {
+            current.Next = current.Next.Next;
+            return true;
+        }
+        return false;
+    }
+    
+    // Поиск элемента
+    public boolean SearchElement(int value) {
+        SingleList current = Head; // поиск с первого узла
+        while (current != null) { // проверка на то что список не кончился
+            if (current.Data == value) { // проверка совпадения значения
+                return true;
+            }
+            current = current.Next; // идем дальше по списку
+        }
+        return false; // не найден
+    }
+    
+    // Удаление всего списка
+    public void DeleteList() {
+        Head = null;  // обнуление вершины
+    }
+    
+    public static void main(String[] args) { // главный метод программы
+        LinkedListJava list = new LinkedListJava(); // создание объекта списка
+        Scanner mainScanner = new Scanner(System.in); 
+        
+        System.out.print("Введите количество элементов: ");
+        int n = mainScanner.nextInt(); // хранение целого числа в переменной
+        
+        // Создание списка
+        list.MakeSingleList(n);
+        System.out.print("Созданный список: ");
+        list.PrintList();
+        
+        // Вставка в начало
+        list.InsertFront(999);
+        System.out.print("После вставки 999 в начало: ");
+        list.PrintList();
+        
+        // Поиск элемента
+        System.out.print("Введите значение для поиска: ");
+        int searchVal = mainScanner.nextInt();
+        System.out.println("Элемент " + searchVal + " " + 
+            (list.SearchElement(searchVal) ? "найден" : "не найден"));
+        
+        // Удаление элемента
+        System.out.print("Введите значение для удаления: ");
+        int deleteVal = mainScanner.nextInt();
+        if (list.DeleteElement(deleteVal)) {
+            System.out.print("Элемент удален. Новый список: ");
+            list.PrintList();
+        } else {
+            System.out.println("Элемент не найден");
+        }
+        
+        mainScanner.close();
+    }
+}
