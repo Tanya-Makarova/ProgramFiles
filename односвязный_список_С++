@@ -1,0 +1,128 @@
+#include <iostream>
+using namespace std;
+
+// Структура узла списка
+struct Single_List {
+    int Data; // Создаем информационное поле
+    Single_List* Next;
+};
+
+// Рекурсивное создание списка
+void Make_Single_List(int n, Single_List** Head) {
+    if (n > 0) {
+        (*Head) = new Single_List(); // Создание нового узла в динамической памяти
+        cout << "Enter value: "; // Приглашение для ввода
+        cin >> (*Head)->Data; // Чтение значения из консоли в поле Data узла
+        (*Head)->Next = NULL; // Установка указателя на следующий узел в конец списка
+        Make_Single_List(n - 1, &((*Head)->Next));  // рекурсивный вызов  для создания остальных n-1 узлов
+    }
+}
+
+// Вывод списка
+void Print_List(Single_List* Head) {
+    Single_List* current = Head;
+    while (current != NULL) { // Если текущее значение не конец
+        cout << current->Data << " -> "; // Команда вывода текущего элемента
+        current = current->Next; // Смещение текущего элемента по списку
+    }
+    cout << "NULL" << endl;
+}
+
+// Вставка элемента в начало
+void Insert_Front(Single_List** Head, int value) {
+    Single_List* new_node = new Single_List(); // Выделяем память под новый узел
+    new_node->Data = value; // Записываем значение в поле Data
+    new_node->Next = *Head; // Новый узел указывает на старый Htad
+    *Head = new_node; // Указание Нead на новый узел
+}
+
+// Удаление элемента
+bool Delete_Element(Single_List** Head, int value) {
+    if (*Head == NULL) return false; // Проверка на пустой список
+
+    // Если удаляемый элемент - первый
+    if ((*Head)->Data == value) {
+        Single_List* temp = *Head; // Сохраняем указатель на старый head
+        *Head = (*Head)->Next; // Перемещаем на следующий узел вершину списка
+        delete temp; // Освобождаем память
+        return true;
+    }
+
+    // Поиск элемента для удаления
+    Single_List* current = *Head; // Начинаем с вершины списка
+    while (current->Next != NULL && current->Next->Data != value) { // Ищем узел перед удаляемым
+        current = current->Next; // Переходим к следующему узлу
+    }
+
+    if (current->Next != NULL) { // Если нашли элемент для удаления
+        Single_List* temp = current->Next; // Сохраняем указатель на этот элемент
+        current->Next = current->Next->Next; //Пропускаем данный узел
+        delete temp; // Удаляем элемент
+        return true; // Если все успешно 
+    }
+    return false; // Если элемент не найден
+}
+
+// Поиск элемента
+bool Search_Element(Single_List* Head, int value) {
+    Single_List* current = Head; // Начинаем с начала списка
+    while (current != NULL) { // Пока не дошли до конца
+        if (current->Data == value) { // Проверяем текущий узел
+            return true; // Элемент найден
+        }
+        current = current->Next; // Проверка неудачна, идем дальше
+    }
+    return false; // Элемент не найден
+}
+
+// Удаление всего списка
+void Delete_List(Single_List** Head) { 
+    while (*Head != NULL) { //Пока список не пустой
+        Single_List* temp = *Head; // Сохранем вершину
+        *Head = (*Head)->Next; // Смещаем вершину
+        delete temp; // Удаляем элемент
+    }
+}
+
+int main() {
+    Single_List* Head = NULL;
+    int n;
+
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    // Создание списка
+    Make_Single_List(n, &Head);
+    cout << "Created list: ";
+    Print_List(Head);
+
+    // Вставка в начало
+    Insert_Front(&Head, 999);
+    cout << "After insert element 999 at the begining: ";
+    Print_List(Head);
+
+    // Поиск элемента
+    int search_val;
+    cout << "Enter number for searching: ";
+    cin >> search_val;
+    cout << "Element " << search_val << " "
+        << (Search_Element(Head, search_val) ? "finded" : "unfinded") << endl;
+
+    // Удаление элемента
+    int delete_val;
+    cout << "Enter number for deleting: ";
+    cin >> delete_val;
+    if (Delete_Element(&Head, delete_val)) {
+        cout << "Element deleted. New list: ";
+        Print_List(Head);
+    }
+    else {
+        cout << "Element unfinded" << endl;
+    }
+
+    // Удаление всего списка
+    Delete_List(&Head);
+    cout << "List has deleted. Head = " << Head << endl;
+
+    return 0;
+}
