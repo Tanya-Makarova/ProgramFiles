@@ -1,0 +1,70 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// Структура данных для хранения ребра графа
+struct Edge {
+    int src, dest;
+};
+
+// Класс для представления объекта графа
+class Graph
+{
+public:
+    // Dектор векторов для представления списка смежности
+    vector<vector<int>> adjList;
+
+    // Конструктор графов
+    Graph(vector<Edge> const& edges, int n)
+    {
+        // Изменяем размер вектора, чтобы он вмещал n элементов типа vector<int>
+        adjList.resize(n);
+
+        // Добавляем рёбра в ориентированный граф
+        for (auto& edge : edges)
+        {
+            // Вставляем в конец
+            adjList[edge.src].push_back(edge.dest);
+
+            // Если граф неориентированный, то убираем комментарий со следующей строки
+            // adjList[edge.dest].push_back(edge.src);
+        }
+    }
+};
+
+// Функция, чтобы вывести граф в списке с смежности
+void printGraph(Graph const& graph, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        // Выводим текущий номер вершины
+        cout << i << " --> ";
+
+        // Выводим на экран все смежные вершины с текущей вершиной
+        for (int v : graph.adjList[i]) {
+            cout << v << " ";
+        }
+        cout << endl;
+    }
+}
+
+// Реализация графа с использованием STL
+int main()
+{
+    //  Приведенный граф в соответсвтии со схемой
+    vector<Edge> edges =
+    {
+        {7, 1}, {1, 2}, {2, 1}, {3, 2}, {4, 5}, {5, 4}, {3, 4}, {4, 3}, {5, 6}, {6, 7}, {0, 3}
+    };
+
+    // Общее количество узлов
+    int n = 8;
+
+    // Конструктор графов
+    Graph graph(edges, n);
+
+    // Выводим граф в виде списка смежности
+    printGraph(graph, n);
+
+    return 0;
+}
